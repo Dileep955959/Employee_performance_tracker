@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseBoard | Employee Performance Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="authShell" class="auth-shell hidden">
+    <section class="auth-stage">
+      <div class="auth-brand">
+        <p class="eyebrow">Secure workspace</p>
+        <h1>Track employee performance behind a simple login wall.</h1>
+        <p class="hero-text">
+          Sign in to manage employee records, review analytics, and export reports from a routed dashboard.
+        </p>
+        <div class="auth-points">
+          <div class="point-card">
+            <strong>Employees</strong>
+            <span>Edit records and maintain team snapshots.</span>
+          </div>
+          <div class="point-card">
+            <strong>Analytics</strong>
+            <span>See monthly trends, team comparisons, and rankings.</span>
+          </div>
+          <div class="point-card">
+            <strong>Reports</strong>
+            <span>Export CSV or print-ready PDF summaries for managers.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button id="showLogin" type="button" class="auth-tab active">Login</button>
+          <button id="showSignup" type="button" class="auth-tab">Create account</button>
+        </div>
+        <p id="authIntro" class="section-note">Use your account to open the protected dashboard.</p>
+        <form id="authForm" class="auth-form">
+          <label id="nameField" class="hidden">
+            Full name
+            <input type="text" id="authName" placeholder="Riya Kapoor">
+          </label>
+          <label>
+            Email
+            <input type="email" id="authEmail" placeholder="manager@pulseboard.com" required>
+          </label>
+          <label>
+            Password
+            <input type="password" id="authPassword" placeholder="Enter password" required>
+          </label>
+          <p id="authMessage" class="auth-message"></p>
+          <button id="authSubmit" type="submit" class="primary-btn">Login</button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <div id="appShell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <p class="eyebrow">PulseBoard</p>
+        <h2>Employee tracker</h2>
+        <p class="section-note">A lightweight performance workspace with routing and local auth.</p>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#/overview" class="nav-link" data-route="/overview">Overview</a>
+        <a href="#/employees" class="nav-link" data-route="/employees">Employees</a>
+        <a href="#/analytics" class="nav-link" data-route="/analytics">Analytics</a>
+        <a href="#/reports" class="nav-link" data-route="/reports">Reports</a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <p class="sidebar-label">Signed in as</p>
+        <strong id="sidebarUser">-</strong>
+        <button id="logoutButton" type="button" class="ghost-btn sidebar-btn">Logout</button>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar panel">
+        <div>
+          <p id="pageEyebrow" class="eyebrow">Workspace</p>
+          <h1 id="pageTitle">Overview</h1>
+        </div>
+        <div class="topbar-meta">
+          <span id="welcomeText" class="section-note">Welcome back</span>
+        </div>
+      </header>
+
+      <section id="routeOverview" class="route-view">
+        <div class="overview-grid">
+          <section class="hero panel">
+            <div class="hero-copy">
+              <p class="eyebrow">Performance intelligence</p>
+              <h2>See who is thriving, who needs support, and where the team is headed.</h2>
+              <p class="hero-text">
+                Route across employees, analytics, and reports from one protected workspace.
+              </p>
+            </div>
+            <section class="hero-panel">
+              <div class="stat-chip">
+                <span id="avgScore">0</span>
+                <label>Average score</label>
+              </div>
+              <div class="stat-chip">
+                <span id="topPerformer">-</span>
+                <label>Top performer</label>
+              </div>
+              <div class="stat-chip">
+                <span id="activeFocus">0</span>
+                <label>Employees tracked</label>
+              </div>
+            </section>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Highlights</p>
+                <h2>Team signals</h2>
+              </div>
+            </div>
+            <div class="insight-grid">
+              <article class="insight-card warm">
+                <span class="metric-label">High performers</span>
+                <strong id="highPerformers">0</strong>
+                <p>Employees scoring 85 or above.</p>
+              </article>
+              <article class="insight-card cool">
+                <span class="metric-label">Needs attention</span>
+                <strong id="needsAttention">0</strong>
+                <p>Employees scoring below 70.</p>
+              </article>
+              <article class="insight-card neutral">
+                <span class="metric-label">Best attendance</span>
+                <strong id="bestAttendance">-</strong>
+                <p>Leading reliability across the current list.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Quick look</p>
+                <h2>Recent ranking</h2>
+              </div>
+              <a href="#/employees" class="ghost-btn inline-link">Manage employees</a>
+            </div>
+            <div id="overviewTopList" class="summary-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="routeEmployees" class="route-view hidden">
+        <div class="employees-layout">
+          <section class="panel form-panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Employee route</p>
+                <h2>Performance snapshot</h2>
+              </div>
+              <p class="section-note">Scores are calculated instantly out of 100.</p>
+            </div>
+
+            <form id="employeeForm" class="employee-form">
+              <input type="hidden" id="employeeId">
+              <label>
+                Employee name
+                <input type="text" id="name" placeholder="Priya Sharma" required>
+              </label>
+              <label>
+                Team
+                <input type="text" id="team" placeholder="Operations" required>
+              </label>
+              <label>
+                Role
+                <input type="text" id="role" placeholder="Team Lead" required>
+              </label>
+              <label>
+                Tasks completed
+                <input type="number" id="tasksCompleted" min="0" max="200" value="70" required>
+              </label>
+              <label>
+                Quality score
+                <input type="number" id="qualityScore" min="0" max="100" value="85" required>
+              </label>
+              <label>
+                Attendance
+                <input type="number" id="attendance" min="0" max="100" value="95" required>
+              </label>
+              <label>
+                Initiative
+                <input type="number" id="initiative" min="0" max="100" value="78" required>
+              </label>
+              <label>
+                Manager notes
+                <textarea id="notes" rows="4" placeholder="Owns deadlines well and mentors junior teammates."></textarea>
+              </label>
+              <div class="form-actions">
+                <button type="submit" id="submitButton" class="primary-btn">Save employee</button>
+                <button type="button" id="cancelEdit" class="ghost-btn hidden">Cancel edit</button>
+              </div>
+            </form>
+          </section>
+
+          <div class="employees-main">
+            <section class="panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Search roster</p>
+                  <h2>Employee tracker</h2>
+                </div>
+                <button id="resetData" class="ghost-btn" type="button">Reset sample data</button>
+              </div>
+              <div class="toolbar">
+                <label class="search-field">
+                  <span>Search</span>
+                  <input type="search" id="searchInput" placeholder="Search by name, team, or role">
+                </label>
+                <label class="filter-field">
+                  <span>Status</span>
+                  <select id="statusFilter">
+                    <option value="all">All employees</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="solid">Solid</option>
+                    <option value="watch">Needs attention</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Leaderboard</p>
+                  <h2>Current employees</h2>
+                </div>
+              </div>
+              <div id="employeeList" class="employee-list"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="routeAnalytics" class="route-view hidden">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Visual reports</p>
+              <h2>Performance analytics</h2>
+            </div>
+            <p class="section-note">Charts update automatically as employees are added or edited.</p>
+          </div>
+          <div class="charts-grid">
+            <article class="chart-card">
+              <div class="chart-head">
+                <h3>Monthly trend</h3>
+                <p>Average score movement over the last 6 months.</p>
+              </div>
+              <div id="monthlyTrendChart" class="chart monthly-trend-chart"></div>
+            </article>
+            <article class="chart-card">
+              <div class="chart-head">
+                <h3>Department comparison</h3>
+                <p>Average performance score by team.</p>
+              </div>
+              <div id="departmentChart" class="chart bar-chart"></div>
+            </article>
+            <article class="chart-card">
+              <div class="chart-head">
+                <h3>Top and bottom performers</h3>
+                <p>Quick view of strongest and weakest current scores.</p>
+              </div>
+              <div id="rankingChart" class="chart ranking-chart"></div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section id="routeReports" class="route-view hidden">
+        <div class="reports-grid">
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Manager exports</p>
+                <h2>Download and print reports</h2>
+              </div>
+            </div>
+            <div class="report-actions">
+              <button id="exportCsv" class="primary-btn" type="button">Export CSV</button>
+              <button id="exportPdf" class="ghost-btn" type="button">Export PDF</button>
+            </div>
+            <p class="section-note">CSV downloads the full roster. PDF opens a print-ready manager summary.</p>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Preview</p>
+                <h2>Report snapshot</h2>
+              </div>
+            </div>
+            <div id="reportPreview" class="report-preview"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <template id="employeeCardTemplate">
+    <article class="employee-card">
+      <div class="card-top">
+        <div>
+          <p class="employee-name"></p>
+          <p class="employee-meta"></p>
+        </div>
+        <div class="score-pill"></div>
+      </div>
+      <div class="progress-block">
+        <div class="progress-labels">
+          <span>Performance score</span>
+          <span class="score-value"></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+      <div class="mini-metrics"></div>
+      <p class="employee-notes"></p>
+      <div class="card-actions">
+        <button class="edit-btn ghost-btn" type="button">Edit</button>
+        <button class="delete-btn" type="button">Remove</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
